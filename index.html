@@ -1,195 +1,439 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Surprise for Sushree ❤️</title>
-
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-body{
-  font-family:Arial;
-  background:#5c0f24;
-  color:white;
-  text-align:center;
-  padding:20px;
-}
+    :root {
+        --primary: #ff4d6d;
+        --secondary: #5c0f24;
+        --glass: rgba(255, 255, 255, 0.1);
+        --text: #ffffff;
+    }
 
-.section{
-  display:none;
-  margin:20px auto;
-  padding:20px;
-  background:rgba(0,0,0,0.45);
-  border-radius:16px;
-  max-width:500px;
-}
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
-.active{
-  display:block;
-}
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #2b061e 0%, #5c0f24 100%);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        position: relative;
+    }
 
-button{
- padding:10px 20px;
- margin-top:12px;
- border:none;
- border-radius:10px;
- font-size:15px;
-}
+    /* Floating Background Hearts */
+    .bg-heart {
+        position: absolute;
+        bottom: -50px;
+        background-color: rgba(255, 255, 255, 0.1);
+        width: 20px;
+        height: 20px;
+        transform: rotate(45deg);
+        animation: floatUp 10s linear infinite;
+        z-index: 0;
+    }
+    .bg-heart::before, .bg-heart::after {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: inherit;
+    }
+    .bg-heart::before { top: -10px; left: 0; }
+    .bg-heart::after { left: -10px; top: 0; }
 
-.option{
-  padding:10px 15px;
-  margin:8px;
-  cursor:pointer;
-  background:white;
-  color:black;
-  border-radius:10px;
-  display:inline-block;
-}
+    @keyframes floatUp {
+        0% { transform: translateY(0) rotate(45deg) scale(0.5); opacity: 0; }
+        20% { opacity: 0.8; }
+        100% { transform: translateY(-120vh) rotate(45deg) scale(1.2); opacity: 0; }
+    }
 
-.small{
-  font-size:13px;
-  opacity:0.9;
-}
+    /* Main Card */
+    .container {
+        position: relative;
+        z-index: 10;
+        width: 90%;
+        max-width: 450px;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 30px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        text-align: center;
+        transition: height 0.3s ease;
+    }
+
+    h1, h2 {
+        font-family: 'Pacifico', cursive;
+        color: #ffb3c1;
+        margin-bottom: 15px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    h1 { font-size: 1.8rem; }
+    h2 { font-size: 1.4rem; }
+
+    p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        opacity: 0.9;
+    }
+
+    .small-text {
+        font-size: 0.8rem;
+        opacity: 0.7;
+        font-style: italic;
+    }
+
+    /* Sections & Transitions */
+    .section {
+        display: none;
+        animation: fadeIn 0.5s ease-out forwards;
+    }
+    .section.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Buttons (Options) */
+    .options-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 20px;
+    }
+
+    button {
+        background: linear-gradient(45deg, #ff4d6d, #c9184a);
+        color: white;
+        border: none;
+        padding: 14px 20px;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    button:hover {
+        transform: scale(1.02);
+        box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+    }
+
+    button:active {
+        transform: scale(0.98);
+    }
+
+    button.secondary {
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+    button.secondary:hover {
+        background: rgba(255,255,255,0.2);
+    }
+
+    /* Custom Alert Toast */
+    #custom-toast {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-100px);
+        background: white;
+        color: #5c0f24;
+        padding: 12px 24px;
+        border-radius: 50px;
+        font-weight: bold;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        z-index: 100;
+        transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: max-content;
+        max-width: 90%;
+    }
+    #custom-toast.show {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    /* Shake Animation for wrong answer */
+    .shake {
+        animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+    }
+    @keyframes shake {
+        10%, 90% { transform: translate3d(-1px, 0, 0); }
+        20%, 80% { transform: translate3d(2px, 0, 0); }
+        30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+        40%, 60% { transform: translate3d(4px, 0, 0); }
+    }
+
+    /* Final Page Styling */
+    .creative-box {
+        background: rgba(0,0,0,0.3);
+        padding: 15px;
+        border-radius: 12px;
+        margin: 15px 0;
+        font-family: monospace;
+        font-size: 0.9rem;
+        border-left: 3px solid #ff4d6d;
+        text-align: left;
+    }
+
+    .highlight {
+        color: #ff4d6d;
+        font-weight: bold;
+    }
 </style>
-
 </head>
-
 <body>
 
-<h1>HEY SUSHREE MOHAPATRA</h1>
-<p class="small">Internet sleepy, Riyaz not sleepy — because BUG = you.</p>
+    <!-- Floating Hearts Container -->
+    <div id="hearts-container"></div>
 
-<!-- QUESTION 1 -->
-<div class="section active" id="q1">
-<h2>1) Yyyaaayi or kuiiyaai yaayi?</h2>
-<input id="a1" placeholder="type answer">
-<br>
-<button onclick="check1()">Submit</button>
-</div>
+    <!-- Custom Toast Notification -->
+    <div id="custom-toast">
+        <span>⚠️</span> <span id="toast-msg">Wrong Answer!</span>
+    </div>
 
-<!-- QUESTION 2 -->
-<div class="section" id="q2">
-<h2>2) mu tumaku bhala pae or bhala pe mu tumaku?</h2>
-<input id="a2" placeholder="answer">
-<br>
-<button onclick="check2()">Submit</button>
-</div>
+    <div class="container" id="card">
+        
+        <!-- INTRO -->
+        <div class="section active" id="intro">
+            <h1>Hey Sushree Mohapatra ❤️</h1>
+            <p>Welcome to your personal surprise console.</p>
+            <p class="small-text">Status: Internet sleepy, Riyaz not sleepy — because BUG = you.</p>
+            <button onclick="nextStep('q1')">Start The Quiz ✨</button>
+        </div>
 
-<!-- QUESTION 3 -->
-<div class="section" id="q3">
-<h2>3) My pookie or someone’s else pookie?</h2>
-<div class="option" onclick="check3('my pookie')">MY POOKIE</div>
-<div class="option" onclick="check3('else')">SOMEONE ELSE</div>
-</div>
+        <!-- QUESTION 1 -->
+        <div class="section" id="q1">
+            <h2>Level 1</h2>
+            <p>Complete the phrase:</p>
+            <div class="options-grid">
+                <button class="secondary" onclick="wrongAnswer('Spelling mistake! Riyaz heart break 💔')">Yyyaaayi</button>
+                <button onclick="nextStep('q2')">Kuiiyaai yaayi ✅</button>
+            </div>
+        </div>
 
-<!-- QUESTION 4 -->
-<div class="section" id="q4">
-<h2>4) not even loving me na?</h2>
-<div class="option" onclick="check4('yes')">YES</div>
-<div class="option" onclick="check4('chap')">CHAPPPP</div>
-</div>
+        <!-- QUESTION 2 -->
+        <div class="section" id="q2">
+            <h2>Level 2 (Odia Test)</h2>
+            <p>Which one feels right?</p>
+            <div class="options-grid">
+                <button class="secondary" onclick="wrongAnswer('Developer says: Odia wrong → Try again!')">mu tumaku bhala pae</button>
+                <button onclick="nextStep('q3')">bhala pe mu tumaku ❤️</button>
+            </div>
+        </div>
 
-<!-- CREATIVE JOURNEY -->
-<div class="section" id="creative">
-<h2>Welcome Sushree – Console Opened</h2>
+        <!-- QUESTION 3 -->
+        <div class="section" id="q3">
+            <h2>Level 3</h2>
+            <p>Whose Pookie are you?</p>
+            <div class="options-grid">
+                <button onclick="nextStep('q4')">MY POOKIE 🐻</button>
+                <button class="secondary" onclick="wrongAnswer('System Jealous! Choose MY POOKIE only!')">Someone else's</button>
+            </div>
+        </div>
 
-<p class="small">Developer note: This server contains 99% love, 1% Riyaz.</p>
+        <!-- QUESTION 4 -->
+        <div class="section" id="q4">
+            <h2>Level 4</h2>
+            <p>Are you not even loving me na?</p>
+            <div class="options-grid">
+                <button class="secondary" onclick="wrongAnswer('Select CHAPPPP to say CHUP — Obey protocol!')">Yes 😤</button>
+                <button onclick="handleChapp()">CHAPPPP 🤫</button>
+            </div>
+        </div>
 
-<p>
-ODIA MODE ON ↓<br><br>
+        <!-- CREATIVE/POEM -->
+        <div class="section" id="creative">
+            <h2>Console Opened 🔓</h2>
+            <p class="small-text">Developer note: This server contains 99% love, 1% Riyaz.</p>
+            
+            <div class="creative-box">
+                <strong>ODIA MODE ON ↓</strong><br><br>
+                MU TUMAKU BHALA PAE<br>
+                TUME MORA SHANTI<br>
+                MORA NUA SAKALA<br>
+                MORA HASA REASON
+            </div>
 
-MU TUMAKU BHALA PAE<br>
-TUME MORA SHANTI<br>
-MORA NUA SAKALA<br>
-MORA HASA REASON<br><br>
+            <div class="creative-box">
+                <strong>ENGLISH MODE ON ↓</strong><br><br>
+                I HAD NO TIME, SO I WROTE TIME.<br>
+                I HAD NO IDEA, SO I WROTE YOUR NAME.
+            </div>
 
-ENGLISH MODE ON ↓<br><br>
+            <button onclick="triggerFinal()">Unlock Birthday Surprise 🎁</button>
+        </div>
 
-I HAD NO TIME,<br>
-SO I WROTE TIME.<br>
-I HAD NO IDEA,<br>
-SO I WROTE YOUR NAME.<br>
-</p>
+        <!-- FINAL -->
+        <div class="section" id="final">
+            <h1>🎉 HAPPY BIRTHDAY 🎉<br>SUSHREE MOHAPATRA</h1>
+            
+            <p>✅ <strong>BOYFRIEND EXAM PASSED</strong><br>
+            Result: Distinction in tolerating Riyaz 😄</p>
+            
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; margin-top: 20px;">
+                <h3 style="color:#ffb3c1">Special Command</h3>
+                <p style="margin-top:10px;">
+                    HELLO BIRTHDAY GIRL,<br>
+                    Please come outside PG tomorrow evening.<br>
+                    <span class="highlight">Surprise visual waiting in REAL LIFE.</span>
+                </p>
+                <p class="small-text">Reward: Cake + Hug + One irritating human (Me).</p>
+            </div>
+            
+            <p class="small-text" style="margin-top:20px;">— Riyaz, Midnight Department 🌙</p>
+        </div>
 
-<button onclick="openFinal()">Unlock Last Level</button>
-
-</div>
-
-<!-- FINAL PAGE -->
-<div class="section" id="final">
-
-<h2>HAPPY BIRTHDAY<br>SUSHREE MOHAPATRA ❤️</h2>
-
-<p>
-YOU PASSED THE BOYFRIEND EXAM<br>
-RESULT = DISTINCTION IN TOLERATING RIYAZ 😄<br>
-</p>
-
-<h3>Special Command</h3>
-
-<p>
-HELLO BIRTHDAY GIRL,<br>
-Please come outside PG tomorrow evening.<br>
-Surprise visual waiting in REAL LIFE — not in HTML.<br>
-Reward: Cake + hug + one irritating human (me).<br>
-</p>
-
-<p class="small">— Riyaz, Midnight Department</p>
-
-</div>
-
+    </div>
 
 <script>
-function show(id){
- document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
- document.getElementById(id).classList.add('active');
-}
+    // --- Audio/Visual Effects ---
+    
+    // Create floating hearts background
+    function createHearts() {
+        const container = document.getElementById('hearts-container');
+        const heartCount = 15;
+        
+        for(let i=0; i<heartCount; i++) {
+            createHeart(container);
+        }
+    }
 
-function cuteError(txt){
- alert(txt);
-}
+    function createHeart(container) {
+        const heart = document.createElement('div');
+        heart.classList.add('bg-heart');
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = Math.random() * 5 + 5 + 's'; // 5-10s
+        heart.style.opacity = Math.random() * 0.5;
+        heart.style.width = Math.random() * 20 + 10 + 'px';
+        heart.style.height = heart.style.width;
+        container.appendChild(heart);
+    }
 
-/* CHECK 1 */
-function check1(){
- var v=document.getElementById('a1').value.toLowerCase().trim();
+    createHearts();
 
- if(v=="kuiiyaai yaayi"){
-   show('q2');
- }else{
-   cuteError("System message: Birthday girl spelling mistake, Riyaz heart break");
- }
-}
+    // --- Interaction Logic ---
 
-/* CHECK 2 */
-function check2(){
- var v=document.getElementById('a2').value.toLowerCase().trim();
+    function nextStep(id) {
+        // Hide all sections
+        document.querySelectorAll('.section').forEach(s => {
+            s.classList.remove('active');
+        });
+        
+        // Show next section
+        const nextSection = document.getElementById(id);
+        if(nextSection) {
+            nextSection.classList.add('active');
+        }
+    }
 
- if(v=="bhala pe mu tumaku"){
-   show('q3');
- }else{
-   cuteError("Developer says: Odia wrong → try again or Riyaz crying in 4G speed");
- }
-}
+    function wrongAnswer(message) {
+        const card = document.getElementById('card');
+        const toast = document.getElementById('custom-toast');
+        const toastMsg = document.getElementById('toast-msg');
 
-/* CHECK 3 */
-function check3(val){
- if(val=="my pookie"){
-   show('q4');
- }else{
-   cuteError("System jealous → choose MY POOKIE only, madam!");
- }
-}
+        // Shake the card
+        card.classList.add('shake');
+        setTimeout(() => card.classList.remove('shake'), 400);
 
-/* CHECK 4 – answer should be CHUP */
-function check4(val){
- if(val=="chap"){
-   alert("CHUPPPPPP CORRECT 😄");
-   show('creative');
- }else{
-   cuteError("Select CHAPPPP to say CHUP — obey girlfriend protocol");
- }
-}
+        // Show Toast
+        toastMsg.innerText = message;
+        toast.classList.add('show');
+        
+        // Hide Toast after 3 seconds
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+        
+        // Vibrate phone if on mobile
+        if(navigator.vibrate) {
+            navigator.vibrate(200);
+        }
+    }
 
-function openFinal(){
- show('final');
-}
+    function handleChapp() {
+        // Show a quick success toast then move on
+        const toast = document.getElementById('custom-toast');
+        const toastMsg = document.getElementById('toast-msg');
+        
+        toast.style.background = "#fff";
+        toast.style.color = "#d62828";
+        toastMsg.innerText = "CHUPPPPPP CORRECT 😄";
+        toast.classList.add('show');
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+            nextStep('creative');
+        }, 1200);
+    }
+
+    function triggerFinal() {
+        nextStep('final');
+        confettiEffect();
+    }
+
+    // --- Simple Confetti Effect ---
+    function confettiEffect() {
+        const colors = ['#ff4d6d', '#fff0f3', '#ffb3c1', '#ffffff'];
+        
+        for (let i = 0; i < 100; i++) {
+            const confetti = document.createElement('div');
+            confetti.style.position = 'fixed';
+            confetti.style.width = '10px';
+            confetti.style.height = '10px';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.top = '-10px';
+            confetti.style.zIndex = '1000';
+            confetti.style.borderRadius = '50%';
+            confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+            
+            document.body.appendChild(confetti);
+            
+            // Remove after animation
+            setTimeout(() => {
+                confetti.remove();
+            }, 5000);
+        }
+    }
+
+    // Inject confetti animation style dynamically
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+
 </script>
 
 </body>
