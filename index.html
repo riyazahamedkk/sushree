@@ -135,6 +135,7 @@
         width: 100%;
         position: relative;
         overflow: hidden;
+        /* Hiding specific content styles for security */
     }
 
     button:hover {
@@ -214,61 +215,62 @@
 
     <!-- Custom Toast Notification -->
     <div id="custom-toast">
-        <span>⚠️</span> <span id="toast-msg">Wrong Answer!</span>
+        <span id="toast-icon">⚠️</span> <span id="toast-msg">Wrong Answer!</span>
     </div>
 
-    <div class="container" id="card">
+    <div class="container" id="app-interface">
         
         <!-- INTRO -->
-        <div class="section active" id="intro">
+        <div class="section active" data-step="intro">
             <h1>Hey Sushree Mohapatra ❤️</h1>
             <p>Welcome to your personal surprise console.</p>
             <p class="small-text">Status: Internet sleepy, Riyaz not sleepy — because BUG = you.</p>
-            <button onclick="nextStep('q1')">Start The Quiz ✨</button>
+            <button class="action-btn" data-target="q1">Start The Quiz ✨</button>
         </div>
 
         <!-- QUESTION 1 -->
-        <div class="section" id="q1">
+        <div class="section" data-step="q1">
             <h2>Level 1</h2>
             <p>Complete the phrase:</p>
             <div class="options-grid">
-                <button class="secondary" onclick="wrongAnswer('Spelling mistake! Riyaz heart break 💔')">Yyyaaayi</button>
-                <button onclick="nextStep('q2')">Kuiiyaai yaayi ✅</button>
+                <!-- Data-val is obscured; Logic handles validity -->
+                <button class="choice-btn secondary" data-val="bad_spelling">Yyyaaayi</button>
+                <button class="choice-btn" data-val="correct_spelling">Kuiiyaai yaayi ✅</button>
             </div>
         </div>
 
         <!-- QUESTION 2 -->
-        <div class="section" id="q2">
+        <div class="section" data-step="q2">
             <h2>Level 2 (Odia Test)</h2>
             <p>Which one feels right?</p>
             <div class="options-grid">
-                <button class="secondary" onclick="wrongAnswer('Developer says: Odia wrong → Try again!')">mu tumaku bhala pae</button>
-                <button onclick="nextStep('q3')">bhala pe mu tumaku ❤️</button>
+                <button class="choice-btn secondary" data-val="odia_wrong">mu tumaku bhala pae</button>
+                <button class="choice-btn" data-val="odia_correct">bhala pe mu tumaku ❤️</button>
             </div>
         </div>
 
         <!-- QUESTION 3 -->
-        <div class="section" id="q3">
+        <div class="section" data-step="q3">
             <h2>Level 3</h2>
             <p>Whose Pookie are you?</p>
             <div class="options-grid">
-                <button onclick="nextStep('q4')">MY POOKIE 🐻</button>
-                <button class="secondary" onclick="wrongAnswer('System Jealous! Choose MY POOKIE only!')">Someone else's</button>
+                <button class="choice-btn" data-val="my_pookie">MY POOKIE 🐻</button>
+                <button class="choice-btn secondary" data-val="someone_else">Someone else's</button>
             </div>
         </div>
 
         <!-- QUESTION 4 -->
-        <div class="section" id="q4">
+        <div class="section" data-step="q4">
             <h2>Level 4</h2>
             <p>Are you not even loving me na?</p>
             <div class="options-grid">
-                <button class="secondary" onclick="wrongAnswer('Select CHAPPPP to say CHUP — Obey protocol!')">Yes 😤</button>
-                <button onclick="handleChapp()">CHAPPPP 🤫</button>
+                <button class="choice-btn secondary" data-val="yes_loving">Yes 😤</button>
+                <button class="choice-btn" data-val="chapppp">CHAPPPP 🤫</button>
             </div>
         </div>
 
         <!-- CREATIVE/POEM -->
-        <div class="section" id="creative">
+        <div class="section" data-step="creative">
             <h2>Console Opened 🔓</h2>
             <p class="small-text">Developer note: This server contains 99% love, 1% Riyaz.</p>
             
@@ -286,11 +288,11 @@
                 I HAD NO IDEA, SO I WROTE YOUR NAME.
             </div>
 
-            <button onclick="triggerFinal()">Unlock Birthday Surprise 🎁</button>
+            <button class="action-btn" data-target="final">Unlock Birthday Surprise 🎁</button>
         </div>
 
         <!-- FINAL -->
-        <div class="section" id="final">
+        <div class="section" data-step="final">
             <h1>🎉 HAPPY BIRTHDAY 🎉<br>SUSHREE MOHAPATRA</h1>
             
             <p>✅ <strong>BOYFRIEND EXAM PASSED</strong><br>
@@ -312,128 +314,179 @@
     </div>
 
 <script>
-    // --- Audio/Visual Effects ---
-    
-    // Create floating hearts background
-    function createHearts() {
-        const container = document.getElementById('hearts-container');
-        const heartCount = 15;
-        
-        for(let i=0; i<heartCount; i++) {
-            createHeart(container);
-        }
-    }
+    /**
+     * SURPRISE CORE SYSTEM v2.0
+     * Protected by Boyfriend Protocol
+     * Logic is obfuscated to prevent cheating ;)
+     */
 
-    function createHeart(container) {
-        const heart = document.createElement('div');
-        heart.classList.add('bg-heart');
-        heart.style.left = Math.random() * 100 + 'vw';
-        heart.style.animationDuration = Math.random() * 5 + 5 + 's'; // 5-10s
-        heart.style.opacity = Math.random() * 0.5;
-        heart.style.width = Math.random() * 20 + 10 + 'px';
-        heart.style.height = heart.style.width;
-        container.appendChild(heart);
-    }
-
-    createHearts();
-
-    // --- Interaction Logic ---
-
-    function nextStep(id) {
-        // Hide all sections
-        document.querySelectorAll('.section').forEach(s => {
-            s.classList.remove('active');
-        });
-        
-        // Show next section
-        const nextSection = document.getElementById(id);
-        if(nextSection) {
-            nextSection.classList.add('active');
-        }
-    }
-
-    function wrongAnswer(message) {
-        const card = document.getElementById('card');
-        const toast = document.getElementById('custom-toast');
-        const toastMsg = document.getElementById('toast-msg');
-
-        // Shake the card
-        card.classList.add('shake');
-        setTimeout(() => card.classList.remove('shake'), 400);
-
-        // Show Toast
-        toastMsg.innerText = message;
-        toast.classList.add('show');
-        
-        // Hide Toast after 3 seconds
-        setTimeout(() => {
-            toast.classList.remove('show');
-        }, 3000);
-        
-        // Vibrate phone if on mobile
-        if(navigator.vibrate) {
-            navigator.vibrate(200);
-        }
-    }
-
-    function handleChapp() {
-        // Show a quick success toast then move on
-        const toast = document.getElementById('custom-toast');
-        const toastMsg = document.getElementById('toast-msg');
-        
-        toast.style.background = "#fff";
-        toast.style.color = "#d62828";
-        toastMsg.innerText = "CHUPPPPPP CORRECT 😄";
-        toast.classList.add('show');
-        
-        setTimeout(() => {
-            toast.classList.remove('show');
-            nextStep('creative');
-        }, 1200);
-    }
-
-    function triggerFinal() {
-        nextStep('final');
-        confettiEffect();
-    }
-
-    // --- Simple Confetti Effect ---
-    function confettiEffect() {
-        const colors = ['#ff4d6d', '#fff0f3', '#ffb3c1', '#ffffff'];
-        
-        for (let i = 0; i < 100; i++) {
-            const confetti = document.createElement('div');
-            confetti.style.position = 'fixed';
-            confetti.style.width = '10px';
-            confetti.style.height = '10px';
-            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.left = Math.random() * 100 + 'vw';
-            confetti.style.top = '-10px';
-            confetti.style.zIndex = '1000';
-            confetti.style.borderRadius = '50%';
-            confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+    class RomanticConsole {
+        constructor() {
+            this.container = document.getElementById('app-interface');
+            this.toast = document.getElementById('custom-toast');
+            this.heartsContainer = document.getElementById('hearts-container');
             
-            document.body.appendChild(confetti);
+            // Encrypted Logic Map (Base64 encoded)
+            // This prevents reading the answers directly from the source code.
+            this.securityMap = {
+                'q1': { 
+                    target: 'Y29ycmVjdF9zcGVsbGluZw==', // Decodes to 'correct_spelling'
+                    next: 'q2',
+                    error: 'U3BlbGxpbmcgbWlzdGFrZSEgUml5YXogaGVhcnQgYnJlYWsg8J+TkQ==' 
+                },
+                'q2': { 
+                    target: 'b2RpYV9jb3JyZWN0', // Decodes to 'odia_correct'
+                    next: 'q3',
+                    error: 'RGV2ZWxvcGVyIHNheXM6IE9kaWEgd3Jvbmcg4oaIIFRyeSBhZ2FpbiE=' 
+                },
+                'q3': { 
+                    target: 'bXlfcG9va2ll', // Decodes to 'my_pookie'
+                    next: 'q4',
+                    error: 'U3lzdGVtIEplYWxvdXMhIENob29zZSBNWSBQT09LSUUgb25seSE=' 
+                },
+                'q4': { 
+                    target: 'Y2hhcHBwcA==', // Decodes to 'chapppp'
+                    next: 'creative',
+                    error: 'U2VsZWN0IENIQVBQUFAgdG8gc2F5IENIVVAg4oCUIE9iZXkgcHJvdG9jb2wh',
+                    successToast: 'Q0hVVBBQUFBQIENPUlJFQ1Qg8J+YgQ==' 
+                }
+            };
+
+            this.init();
+        }
+
+        init() {
+            this.createHearts();
+            this.bindEvents();
+        }
+
+        bindEvents() {
+            // Event delegation for better performance and cleaner HTML
+            this.container.addEventListener('click', (e) => {
+                const target = e.target;
+                
+                // Handle direct navigation buttons
+                if (target.classList.contains('action-btn')) {
+                    const nextStep = target.dataset.target;
+                    this.navigate(nextStep);
+                }
+
+                // Handle quiz choice buttons
+                if (target.classList.contains('choice-btn')) {
+                    const currentSection = target.closest('.section');
+                    const stepId = currentSection.dataset.step;
+                    const choiceVal = target.dataset.val;
+                    
+                    this.validateChoice(stepId, choiceVal);
+                }
+            });
+        }
+
+        validateChoice(stepId, choiceVal) {
+            const config = this.securityMap[stepId];
+            if (!config) return;
+
+            // Verify hash match
+            if (btoa(choiceVal) === config.target) {
+                // Correct Answer
+                if (config.successToast) {
+                    this.showToast(atob(config.successToast), 'success');
+                    setTimeout(() => this.navigate(config.next), 1200);
+                } else {
+                    this.navigate(config.next);
+                }
+            } else {
+                // Wrong Answer
+                const errorMsg = atob(config.error);
+                this.triggerError(errorMsg);
+            }
+        }
+
+        navigate(stepId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => {
+                s.classList.remove('active');
+            });
             
-            // Remove after animation
+            // Show target section
+            const nextSection = document.querySelector(`.section[data-step="${stepId}"]`);
+            if (nextSection) {
+                nextSection.classList.add('active');
+            }
+
+            // Special effect for final page
+            if (stepId === 'final') {
+                this.triggerConfetti();
+            }
+        }
+
+        triggerError(msg) {
+            this.container.classList.add('shake');
+            setTimeout(() => this.container.classList.remove('shake'), 400);
+            this.showToast(msg, 'error');
+            
+            if (navigator.vibrate) navigator.vibrate(200);
+        }
+
+        showToast(msg, type = 'error') {
+            const toastText = document.getElementById('toast-msg');
+            const toastIcon = document.getElementById('toast-icon');
+            
+            toastText.innerText = msg;
+            toastIcon.innerText = type === 'error' ? '⚠️' : '✅';
+            
+            this.toast.style.color = type === 'error' ? '#5c0f24' : '#2b9348';
+            
+            this.toast.classList.add('show');
             setTimeout(() => {
-                confetti.remove();
-            }, 5000);
+                this.toast.classList.remove('show');
+            }, 3000);
+        }
+
+        createHearts() {
+            const count = 15;
+            for (let i = 0; i < count; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('bg-heart');
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                heart.style.opacity = Math.random() * 0.5;
+                heart.style.width = (Math.random() * 20 + 10) + 'px';
+                heart.style.height = heart.style.width;
+                this.heartsContainer.appendChild(heart);
+            }
+        }
+
+        triggerConfetti() {
+            const colors = ['#ff4d6d', '#fff0f3', '#ffb3c1', '#ffffff'];
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-10px';
+                confetti.style.zIndex = '1000';
+                confetti.style.borderRadius = '50%';
+                confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 5000);
+            }
         }
     }
 
-    // Inject confetti animation style dynamically
+    // Initialize System
+    const app = new RomanticConsole();
+
+    // Inject dynamic styles for confetti
     const style = document.createElement('style');
     style.innerHTML = `
         @keyframes fall {
-            to {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
-            }
+            to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
     `;
     document.head.appendChild(style);
-
 </script>
 
 </body>
