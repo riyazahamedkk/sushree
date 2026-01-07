@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Surprise for Sushree ❤️</title>
+
+<style>
+body{
+  font-family:Arial;
+  background:#5c0f24;
+  color:white;
+  text-align:center;
+  padding:20px;
+}
+
+.section{
+  display:none;
+  margin:20px auto;
+  padding:20px;
+  background:rgba(0,0,0,0.45);
+  border-radius:16px;
+  max-width:500px;
+}
+
+.active{
+  display:block;
+}
+
+button{
+ padding:10px 20px;
+ margin-top:12px;
+ border:none;
+ border-radius:10px;
+ font-size:15px;
+}
+
+.option{
+  padding:10px 15px;
+  margin:8px;
+  cursor:pointer;
+  background:white;
+  color:black;
+  border-radius:10px;
+  display:inline-block;
+}
+
+.small{
+  font-size:13px;
+  opacity:0.9;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>HEY SUSHREE MOHAPATRA</h1>
+<p class="small">Internet sleepy, Riyaz not sleepy — because BUG = you.</p>
+
+<!-- QUESTION 1 -->
+<div class="section active" id="q1">
+<h2>1) Yyyaaayi or kuiiyaai yaayi?</h2>
+<input id="a1" placeholder="type answer">
+<br>
+<button onclick="check1()">Submit</button>
+</div>
+
+<!-- QUESTION 2 -->
+<div class="section" id="q2">
+<h2>2) mu tumaku bhala pae or bhala pe mu tumaku?</h2>
+<input id="a2" placeholder="answer">
+<br>
+<button onclick="check2()">Submit</button>
+</div>
+
+<!-- QUESTION 3 -->
+<div class="section" id="q3">
+<h2>3) My pookie or someone’s else pookie?</h2>
+<div class="option" onclick="check3('my pookie')">MY POOKIE</div>
+<div class="option" onclick="check3('else')">SOMEONE ELSE</div>
+</div>
+
+<!-- QUESTION 4 -->
+<div class="section" id="q4">
+<h2>4) not even loving me na?</h2>
+<div class="option" onclick="check4('yes')">YES</div>
+<div class="option" onclick="check4('chap')">CHAPPPP</div>
+</div>
+
+<!-- CREATIVE JOURNEY -->
+<div class="section" id="creative">
+<h2>Welcome Sushree – Console Opened</h2>
+
+<p class="small">Developer note: This server contains 99% love, 1% Riyaz.</p>
+
+<p>
+ODIA MODE ON ↓<br><br>
+
+MU TUMAKU BHALA PAE<br>
+TUME MORA SHANTI<br>
+MORA NUA SAKALA<br>
+MORA HASA REASON<br><br>
+
+ENGLISH MODE ON ↓<br><br>
+
+I HAD NO TIME,<br>
+SO I WROTE TIME.<br>
+I HAD NO IDEA,<br>
+SO I WROTE YOUR NAME.<br>
+</p>
+
+<button onclick="openFinal()">Unlock Last Level</button>
+
+</div>
+
+<!-- FINAL PAGE -->
+<div class="section" id="final">
+
+<h2>HAPPY BIRTHDAY<br>SUSHREE MOHAPATRA ❤️</h2>
+
+<p>
+YOU PASSED THE BOYFRIEND EXAM<br>
+RESULT = DISTINCTION IN TOLERATING RIYAZ 😄<br>
+</p>
+
+<h3>Special Command</h3>
+
+<p>
+HELLO BIRTHDAY GIRL,<br>
+Please come outside PG tomorrow evening.<br>
+Surprise visual waiting in REAL LIFE — not in HTML.<br>
+Reward: Cake + hug + one irritating human (me).<br>
+</p>
+
+<p class="small">— Riyaz, Midnight Department</p>
+
+</div>
+
+
+<script>
+function show(id){
+ document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+}
+
+function cuteError(txt){
+ alert(txt);
+}
+
+/* CHECK 1 */
+function check1(){
+ var v=document.getElementById('a1').value.toLowerCase().trim();
+
+ if(v=="kuiiyaai yaayi"){
+   show('q2');
+ }else{
+   cuteError("System message: Birthday girl spelling mistake, Riyaz heart break");
+ }
+}
+
+/* CHECK 2 */
+function check2(){
+ var v=document.getElementById('a2').value.toLowerCase().trim();
+
+ if(v=="bhala pe mu tumaku"){
+   show('q3');
+ }else{
+   cuteError("Developer says: Odia wrong → try again or Riyaz crying in 4G speed");
+ }
+}
+
+/* CHECK 3 */
+function check3(val){
+ if(val=="my pookie"){
+   show('q4');
+ }else{
+   cuteError("System jealous → choose MY POOKIE only, madam!");
+ }
+}
+
+/* CHECK 4 – answer should be CHUP */
+function check4(val){
+ if(val=="chap"){
+   alert("CHUPPPPPP CORRECT 😄");
+   show('creative');
+ }else{
+   cuteError("Select CHAPPPP to say CHUP — obey girlfriend protocol");
+ }
+}
+
+function openFinal(){
+ show('final');
+}
+</script>
+
+</body>
+</html>
