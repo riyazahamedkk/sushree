@@ -1,232 +1,717 @@
 <!DOCTYPE html>
-<html lang="or">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>For You ❤️</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Sushree ❤️</title>
 
 <!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Handlee&family=Playfair+Display&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Great+Vibes&family=Noto+Sans+Oriya:wght@400;700&family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+    :root {
+        --bg-color: #1a0f0f;
+        --accent-red: #8b0000;
+        --accent-gold: #c5a059;
+        --paper-color: #f0e6d2;
+        --ink-color: #2b1d1d;
+        --shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
 
-body{
-    font-family:'Playfair Display', serif;
-    background:linear-gradient(135deg,#fdeff2,#fff6e5);
-    height:100vh;
-    overflow:hidden;
-    user-select:none;
-}
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        user-select: none;
+        cursor: url('https://cdn.custom-cursor.com/db/8342/32/arrow2635.png'), auto; /* Vintage Quill Cursor */
+    }
 
-.section{
-    display:none;
-    height:100vh;
-    width:100%;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    text-align:center;
-    padding:20px;
-}
+    body {
+        background-color: var(--bg-color);
+        font-family: 'Playfair Display', serif;
+        overflow: hidden;
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--paper-color);
+    }
 
-.section.active{display:flex}
+    /* --- GLOBAL EFFECTS --- */
+    /* Film Grain Overlay */
+    .overlay-grain {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+        opacity: 0.1;
+        pointer-events: none;
+        z-index: 999;
+        animation: grainMove 20s linear infinite;
+    }
 
-/* PAGE 1 */
-#page1 h1{
-    max-width:650px;
-    font-size:26px;
-    line-height:1.6;
-    margin-bottom:30px;
-}
+    /* Vignette */
+    .overlay-vignette {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: radial-gradient(circle, rgba(0,0,0,0) 50%, rgba(20,10,10,0.9) 100%);
+        pointer-events: none;
+        z-index: 998;
+    }
 
-.thread{
-    width:240px;
-    height:5px;
-    background:#b3002d;
-    border-radius:50px;
-    cursor:pointer;
-    animation:pulse 1.6s infinite;
-}
+    /* Floating Particles Container */
+    #particles-container {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 5;
+    }
 
-@keyframes pulse{
-    0%{box-shadow:0 0 6px #b3002d}
-    50%{box-shadow:0 0 18px #b3002d}
-    100%{box-shadow:0 0 6px #b3002d}
-}
+    .particle {
+        position: absolute;
+        background: rgba(255, 215, 0, 0.3);
+        border-radius: 50%;
+        animation: floatParticle linear infinite;
+    }
 
-/* PASSWORD */
-#passwordPage input{
-    padding:12px;
-    font-size:18px;
-    text-align:center;
-    border-radius:8px;
-    border:1px solid #999;
-    width:250px;
-    margin-top:15px;
-}
+    /* --- UTILS --- */
+    .hidden { display: none !important; }
+    
+    .fade-out {
+        opacity: 0;
+        transform: scale(0.95);
+        transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+        pointer-events: none;
+    }
 
-#passwordPage button{
-    margin-top:15px;
-    padding:10px 26px;
-    font-size:16px;
-    border:none;
-    border-radius:25px;
-    background:#b3002d;
-    color:white;
-    cursor:pointer;
-}
+    .fade-in {
+        opacity: 0;
+        animation: fadeIn 2s ease-in forwards;
+    }
 
-/* LETTER */
-#letterPage{
-    overflow-y:auto;
-}
+    @keyframes fadeIn { to { opacity: 1; } }
+    @keyframes grainMove { 0% { background-position: 0 0; } 100% { background-position: 100% 100%; } }
+    @keyframes floatParticle {
+        0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+        20% { opacity: 0.5; }
+        100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+    }
 
-.letter{
-    background:#fffaf0;
-    max-width:850px;
-    padding:45px;
-    border-radius:20px;
-    box-shadow:0 15px 45px rgba(0,0,0,0.18);
-}
+    /* --- SCREEN 1: ROYAL LOCK SCREEN --- */
+    #lock-screen {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at center, #2e1a1a, #000);
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        transition: transform 1.2s cubic-bezier(0.7, 0, 0.3, 1);
+        border: 20px solid transparent;
+        border-image: url("https://www.transparenttextures.com/patterns/wood-pattern.png") 30 stretch; 
+    }
 
-.letter h2{
-    font-family:'Great Vibes', cursive;
-    font-size:42px;
-    margin-bottom:30px;
-}
+    #lock-screen.slide-up { transform: translateY(-100%); }
 
-.letter p{
-    font-family:'Handlee', cursive;
-    font-size:21px;
-    line-height:1.9;
-    margin-bottom:18px;
-}
+    .ornament {
+        color: var(--accent-gold);
+        font-size: 3rem;
+        margin-bottom: 10px;
+        opacity: 0.8;
+        text-shadow: 0 0 10px rgba(197, 160, 89, 0.5);
+    }
 
-.signature{
-    margin-top:30px;
-    font-size:22px;
-}
+    .lock-content h2 {
+        font-family: 'Cinzel', serif;
+        font-size: 3rem;
+        margin-bottom: 30px;
+        color: var(--accent-gold);
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+        -webkit-background-clip: text;
+        color: transparent;
+        animation: shine 3s infinite linear;
+    }
 
-#love{
-    font-family:'Great Vibes', cursive;
-    font-size:52px;
-    color:#b3002d;
-    margin-top:35px;
-    animation:heartbeat 1.5s infinite;
-}
+    @keyframes shine {
+        0% { background-position: 0; }
+        100% { background-position: 200px; }
+    }
 
-@keyframes heartbeat{
-    0%{transform:scale(1)}
-    50%{transform:scale(1.2)}
-    100%{transform:scale(1)}
-}
+    .input-group { position: relative; margin-bottom: 25px; }
 
-/* Blur on tab switch */
-.blur{
-    filter:blur(12px);
-}
+    input[type="password"] {
+        padding: 15px 30px;
+        border-radius: 5px;
+        border: 2px solid var(--accent-gold);
+        background: rgba(0,0,0,0.6);
+        color: var(--accent-gold);
+        font-family: 'Cinzel', serif;
+        font-size: 1.2rem;
+        text-align: center;
+        outline: none;
+        width: 300px;
+        letter-spacing: 5px;
+        transition: all 0.3s;
+        box-shadow: 0 0 15px rgba(197, 160, 89, 0.2);
+    }
+
+    input:focus {
+        background: rgba(0,0,0,0.8);
+        box-shadow: 0 0 25px rgba(197, 160, 89, 0.5);
+    }
+
+    .unlock-btn {
+        padding: 15px 50px;
+        background: linear-gradient(45deg, #8b0000, #5a0000);
+        color: var(--accent-gold);
+        border: 1px solid var(--accent-gold);
+        font-family: 'Cinzel', serif;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .unlock-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(139, 0, 0, 0.4);
+    }
+
+    .unlock-btn::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: rgba(255,255,255,0.1);
+        transform: rotate(45deg) translateY(-100%);
+        transition: transform 0.5s;
+    }
+    .unlock-btn:hover::after { transform: rotate(45deg) translateY(0); }
+
+    /* --- SCREEN 2: APOLOGY (Atmospheric) --- */
+    #page-thread {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle, #2b1d1d, #000);
+        z-index: 50;
+    }
+
+    .apology-text h1 {
+        font-family: 'Great Vibes', cursive;
+        font-size: 4rem;
+        color: #e0e0e0;
+        text-shadow: 0 0 10px rgba(255,255,255,0.2);
+        margin-bottom: 20px;
+    }
+
+    .apology-text p {
+        font-family: 'Playfair Display', serif;
+        color: #aaa;
+        font-style: italic;
+    }
+
+    /* Glowing Thread */
+    .thread-container {
+        margin-top: 50px;
+        position: relative;
+        width: 80%;
+        max-width: 800px;
+        height: 120px;
+        cursor: pointer;
+    }
+
+    .instruction {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        top: -40px;
+        color: var(--accent-red);
+        font-family: 'Cinzel', serif;
+        font-size: 0.9rem;
+        letter-spacing: 2px;
+        animation: pulseText 2s infinite;
+    }
+
+    @keyframes pulseText { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; text-shadow: 0 0 10px red; } }
+
+    path#thread-path {
+        fill: none;
+        stroke: var(--accent-red);
+        stroke-width: 3;
+        stroke-linecap: round;
+        filter: drop-shadow(0px 0px 8px rgba(255, 0, 0, 0.6));
+        transition: stroke-dashoffset 2s ease-in-out, opacity 1s;
+    }
+
+    /* Heart Knot */
+    .heart-knot {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 30px;
+        color: var(--accent-red);
+        filter: drop-shadow(0 0 10px red);
+        animation: heartbeat 1.2s infinite;
+        transition: all 0.5s;
+    }
+
+    @keyframes heartbeat {
+        0% { transform: translate(-50%, -50%) scale(1); }
+        15% { transform: translate(-50%, -50%) scale(1.3); }
+        30% { transform: translate(-50%, -50%) scale(1); }
+        45% { transform: translate(-50%, -50%) scale(1.15); }
+        60% { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    /* --- SCREEN 3: ANCIENT LETTER --- */
+    #page-letter {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: url('https://www.transparenttextures.com/patterns/dark-wood.png'), #1a0f0f;
+        z-index: 10;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        opacity: 0; 
+    }
+
+    .letter-card {
+        background-color: var(--paper-color);
+        width: 100%;
+        max-width: 700px;
+        padding: 60px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 100px rgba(61, 43, 31, 0.3);
+        border: 1px solid rgba(0,0,0,0.1);
+        position: relative;
+        max-height: 90vh;
+        overflow-y: auto;
+        /* Ragged edges effect via clip-path is tricky, using border-radius & shadow for now */
+        border-radius: 2px;
+    }
+
+    /* Old Paper Texture */
+    .letter-card::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+        opacity: 0.7;
+        pointer-events: none;
+        z-index: 0;
+        mix-blend-mode: multiply;
+    }
+
+    /* Interactive SVG Roses */
+    .rose-decor {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        z-index: 2;
+        opacity: 0.8;
+        transition: transform 0.3s, filter 0.3s;
+        cursor: help; /* Suggests interaction */
+    }
+    .rose-decor:hover {
+        transform: scale(1.1) rotate(5deg);
+        filter: drop-shadow(0 0 5px var(--accent-red));
+    }
+
+    .rose-tl { top: 20px; left: 20px; transform: rotate(-45deg); }
+    .rose-tr { top: 20px; right: 20px; transform: rotate(45deg); }
+    .rose-bl { bottom: 20px; left: 20px; transform: rotate(-135deg); }
+    .rose-br { bottom: 20px; right: 20px; transform: rotate(135deg); }
+
+    .letter-content {
+        position: relative;
+        z-index: 1;
+        font-family: 'Noto Sans Oriya', sans-serif;
+        color: var(--ink-color);
+        line-height: 2.4;
+        font-size: 1.3rem;
+        text-align: justify;
+    }
+
+    /* Ink Bleed Animation */
+    .letter-content p {
+        margin-bottom: 25px;
+        opacity: 0;
+        filter: blur(4px);
+        transform: translateY(5px);
+        transition: opacity 1.5s, filter 1.5s, transform 1.5s;
+    }
+
+    .letter-content p.visible {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+    }
+
+    .signature {
+        text-align: right;
+        margin-top: 50px;
+        color: var(--accent-red);
+    }
+    
+    .sig-eng {
+        font-family: 'Great Vibes', cursive;
+        font-size: 2rem;
+        display: block;
+    }
+    .sig-odia {
+        font-family: 'Noto Sans Oriya', sans-serif;
+        font-weight: 700;
+        font-size: 1.4rem;
+        display: block;
+    }
+
+    /* Music Button */
+    .music-control {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: rgba(197, 160, 89, 0.2);
+        border: 1px solid var(--accent-gold);
+        color: var(--accent-gold);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 200;
+        transition: all 0.3s;
+        backdrop-filter: blur(5px);
+    }
+    .music-control:hover { background: rgba(197, 160, 89, 0.4); transform: scale(1.1); }
+
+    /* Custom Scrollbar */
+    .letter-card::-webkit-scrollbar { width: 6px; }
+    .letter-card::-webkit-scrollbar-thumb { background: rgba(61, 43, 31, 0.4); border-radius: 3px; }
+
+    /* Mouse Trail Elements */
+    .trail-dot {
+        position: fixed;
+        width: 6px;
+        height: 6px;
+        background: var(--accent-gold);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        animation: fadeTrail 1s forwards;
+    }
+    
+    .petal {
+        position: absolute;
+        background: #ff0000;
+        width: 10px;
+        height: 10px;
+        border-radius: 50% 0 50% 50%;
+        pointer-events: none;
+        z-index: 100;
+        opacity: 0.8;
+    }
+
+    @keyframes fadeTrail {
+        to { opacity: 0; transform: scale(0); }
+    }
+    
+    @keyframes fall {
+        to { transform: translateY(100px) rotate(90deg); opacity: 0; }
+    }
+
 </style>
 </head>
-
 <body>
 
-<!-- PAGE 1 -->
-<div class="section active" id="page1">
-<h1>
-I’m really sorry…<br>
-I didn’t get enough time to write everything I wanted to say today.<br>
-I promise I’ll write it properly and give it to you very soon.
-</h1>
-<div class="thread" onclick="goPassword()"></div>
-</div>
+    <!-- OVERLAYS -->
+    <div class="overlay-grain"></div>
+    <div class="overlay-vignette"></div>
+    <div id="particles-container"></div>
 
-<!-- PASSWORD -->
-<div class="section" id="passwordPage">
-<h2>Enter the secret to open</h2>
-<input type="password" id="pass" placeholder="Phone Number">
-<button onclick="unlock()">Unlock</button>
-<p id="error" style="color:red;margin-top:10px;"></p>
-</div>
+    <!-- AUDIO -->
+    <audio id="bg-music" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/10/05/audio_6862955c9d.mp3" type="audio/mpeg">
+    </audio>
+    <div class="music-control" onclick="toggleMusic()">🔇</div>
 
-<!-- LETTER -->
-<div class="section" id="letterPage">
-<div class="letter" id="letterBox">
-<h2>ମୋର ପ୍ରିୟ ସୁଶ୍ରୀ ମହାପାତ୍ର,</h2>
-<div id="typeText"></div>
+    <!-- 1. LOCK SCREEN -->
+    <div id="lock-screen">
+        <div class="ornament">⚜️</div>
+        <div class="lock-content">
+            <h2>Royal Archive</h2>
+            <div class="input-group">
+                <input type="password" id="password-input" placeholder="Secret Code" onkeypress="handleEnter(event)">
+            </div>
+            <button class="unlock-btn" onclick="checkPassword()">Open Seal</button>
+            <div style="margin-top:15px; font-family:'Cinzel'; color:#888; font-size:0.8rem;">Hint: Leo Das Number</div>
+        </div>
+    </div>
 
-<div class="signature">
-ଇତି,<br>ତୁମର ରିୟାଜ୍ ଅହମ୍ମଦ୍
-</div>
+    <!-- 2. THREAD SCREEN -->
+    <div id="page-thread">
+        <div class="apology-text fade-in">
+            <h1>My Dearest Apology</h1>
+            <p>I needed more time to pen my soul...</p>
+            <p>But the thread of fate connects us still.</p>
+        </div>
 
-<div id="love">I Love You ❤️</div>
-</div>
-</div>
+        <div class="thread-container" onclick="breakThread()" onmousemove="sparkleThread(event)">
+            <div class="instruction">Sever the knot to read</div>
+            
+            <svg class="thread-line" viewBox="0 0 800 100" preserveAspectRatio="none">
+                <path id="thread-path" d="M0,50 C200,90 600,10 800,50" />
+            </svg>
+            
+            <!-- Replaced simple knot with a Heart Icon -->
+            <div class="heart-knot" id="knot-element">❤️</div>
+        </div>
+    </div>
+
+    <!-- 3. LETTER SCREEN -->
+    <div id="page-letter">
+        <div class="letter-card">
+            
+            <!-- SVG Roses -->
+            <div class="rose-decor rose-tl" onmouseover="rainPetals(this)">
+                <svg viewBox="0 0 100 100" fill="none" stroke="#8b0000" stroke-width="2">
+                   <path d="M50 50 Q30 20 50 10 Q70 20 50 50" fill="#a52a2a" />
+                   <circle cx="50" cy="50" r="15" fill="#800000" />
+                   <path d="M50 50 Q20 80 50 90 Q80 80 50 50" fill="#a52a2a" />
+                </svg>
+            </div>
+            <div class="rose-decor rose-tr" onmouseover="rainPetals(this)">
+                <svg viewBox="0 0 100 100" fill="none" stroke="#8b0000" stroke-width="2">
+                   <path d="M50 50 Q30 20 50 10 Q70 20 50 50" fill="#a52a2a" />
+                   <circle cx="50" cy="50" r="15" fill="#800000" />
+                   <path d="M50 50 Q20 80 50 90 Q80 80 50 50" fill="#a52a2a" />
+                </svg>
+            </div>
+             <!-- Bottom roses flipped in CSS -->
+             <div class="rose-decor rose-bl" onmouseover="rainPetals(this)">
+                <svg viewBox="0 0 100 100" fill="none" stroke="#8b0000" stroke-width="2">
+                    <circle cx="50" cy="50" r="20" fill="#800000" />
+                    <path d="M50 50 Q10 10 50 0" stroke="#006400" />
+                </svg>
+            </div>
+            <div class="rose-decor rose-br" onmouseover="rainPetals(this)">
+                <svg viewBox="0 0 100 100" fill="none" stroke="#8b0000" stroke-width="2">
+                    <circle cx="50" cy="50" r="20" fill="#800000" />
+                    <path d="M50 50 Q90 10 50 0" stroke="#006400" />
+                </svg>
+            </div>
+
+            <div class="letter-content" id="letter-text">
+                <!-- Odia content injected here via JS -->
+            </div>
+        </div>
+    </div>
 
 <script>
-/* PAGE FLOW */
-function goPassword(){
-    page1.classList.remove("active");
-    passwordPage.classList.add("active");
-}
+    // --- CONFIGURATION ---
+    const PASSCODE = "8056535112";
+    const odiaLetterContent = [
+        "ମୋର ପ୍ରିୟ ସୁଶ୍ରୀ ମହାପାତ୍ର,",
+        "ମୁଁ ଜାଣେନି କେଉଁଠୁ ଆରମ୍ଭ କରିବି, କିନ୍ତୁ ଆଜି ମୋ ହୃଦୟର ସମସ୍ତ କଥା ତୁମ ସମ୍ମୁଖରେ ରଖିବାକୁ ଚାହୁଁଛି ।",
+        "ତୁମେ ଯେବେଠାରୁ ମୋ ଜୀବନରେ ଆସିଛ, ସେବେଠାରୁ ମୋ ସମ୍ପୂର୍ଣ୍ଣ ଦୁନିଆ ଆଲୋକିତ ହୋଇଯାଇଛି । ତୁମେ କେବଳ ମୋର ପ୍ରେମିକା ନୁହେଁ, ତୁମେ ମୋର ସବୁଠାରୁ ଭଲ ସାଙ୍ଗ, ମୋର ଆଶ୍ରୟ ଏବଂ ମୋର ଜୀବନର ସବୁଠାରୁ ସୁନ୍ଦର ଅଂଶ ।",
+        "ତୁମର ସେହି ଗୋଟିଏ ହସ ମୋର ସମସ୍ତ ଦୁଃଖକୁ ମୁହୂର୍ତ୍ତ ମଧ୍ୟରେ ଭୁଲାଇ ଦେଉଛି । ମୁଁ ଭଗବାନଙ୍କୁ ହୃଦୟରୁ ଧନ୍ୟବାଦ ଦେଉଛି, ଯେ ସେ ମୋ ଜୀବନରେ ତୁମ ପରି ଜଣେ ମୂଲ୍ୟବାନ ସାଥୀକୁ ଆଣିଛନ୍ତି ।",
+        "ମୁଁ ତୁମକୁ କଥା ଦେଉଛି — ସାରା ଜୀବନ ତୁମକୁ ଏମିତି ଭଲ ପାଇବି, ତୁମର ଯତ୍ନ ନେବି ଏବଂ ସବୁବେଳେ ତୁମ ପାଖରେ ଦଢ଼ି ରହିବି ।",
+        "ମୋ ଜୀବନକୁ ଏତେ ସୁନ୍ଦର କରିଦେଇଥିବାରୁ ଧନ୍ୟବାଦ ।",
+        "ମୁଁ ତୁମକୁ ଅସୀମ ଭାବରେ ଭଲପାଏ ।"
+    ];
 
-function unlock(){
-    if(pass.value === "8056535112"){
-        passwordPage.classList.remove("active");
-        letterPage.classList.add("active");
-        document.body.style.overflow="auto";
-        typeWriter();
-    } else {
-        error.innerText="Wrong number 💔";
-    }
-}
+    const signatureHTML = `
+        <div class="signature">
+            <span class="sig-eng">Yours forever,</span>
+            <span class="sig-odia">ତୁମର ରିୟାଜ୍ ଅହମ୍ମଦ୍ 🌹</span>
+        </div>
+    `;
 
-/* TYPEWRITER EFFECT */
-const letterText = [
-"ମୁଁ ଜାଣେନି କେଉଁଠୁ ଆରମ୍ଭ କରିବି, କିନ୍ତୁ ଆଜି ମୋ ହୃଦୟର ସମସ୍ତ କଥା ତୁମ ସମ୍ମୁଖରେ ରଖିବାକୁ ଚାହୁଁଛି ।",
-"ତୁମେ ଯେବେଠାରୁ ମୋ ଜୀବନରେ ଆସିଛ, ସେବେଠାରୁ ମୋ ସମ୍ପୂର୍ଣ୍ଣ ଦୁନିଆ ଆଲୋକିତ ହୋଇଯାଇଛି ।",
-"ତୁମେ କେବଳ ମୋର ପ୍ରେମିକା ନୁହେଁ, ତୁମେ ମୋର ସବୁଠାରୁ ଭଲ ସାଙ୍ଗ, ମୋର ଆଶ୍ରୟ ଏବଂ ମୋର ଜୀବନ ।",
-"ମୁଁ ତୁମକୁ କଥା ଦେଉଛି — ସାରା ଜୀବନ ତୁମ ପାଖରେ ରହିବି ।",
-"ମୁଁ ତୁମକୁ ଅସୀମ ଭାବରେ ଭଲପାଏ ।"
-];
-
-let line = 0, char = 0;
-function typeWriter(){
-    if(line < letterText.length){
-        if(char < letterText[line].length){
-            typeText.innerHTML += letterText[line].charAt(char);
-            char++;
-            setTimeout(typeWriter, 40);
-        } else {
-            typeText.innerHTML += "<br><br>";
-            line++; char = 0;
-            setTimeout(typeWriter, 400);
+    // --- SETUP PARTICLES ---
+    function initParticles() {
+        const container = document.getElementById('particles-container');
+        for(let i=0; i<30; i++) {
+            createParticle(container);
         }
     }
-}
 
-/* SECURITY BLOCKS */
-document.addEventListener("contextmenu", e => e.preventDefault());
-document.addEventListener("keydown", e => {
-    if(
-        e.key === "F12" ||
-        (e.ctrlKey && e.shiftKey && ["I","J","C"].includes(e.key)) ||
-        (e.ctrlKey && e.key === "U") ||
-        (e.ctrlKey && e.key === "S") ||
-        (e.ctrlKey && e.key === "P")
-    ){
-        e.preventDefault();
+    function createParticle(container) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = Math.random() * 4 + 1;
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.top = Math.random() * 100 + 'vh';
+        p.style.animationDuration = (Math.random() * 10 + 10) + 's';
+        p.style.animationDelay = (Math.random() * 5) + 's';
+        container.appendChild(p);
     }
-});
 
-/* BLUR WHEN TAB CHANGES */
-document.addEventListener("visibilitychange", ()=>{
-    if(document.hidden){
-        document.body.classList.add("blur");
-    } else {
-        document.body.classList.remove("blur");
+    initParticles();
+
+    // --- MOUSE TRAIL ---
+    document.addEventListener('mousemove', function(e) {
+        if(Math.random() > 0.8) { // Performance check
+            const dot = document.createElement('div');
+            dot.className = 'trail-dot';
+            dot.style.left = e.pageX + 'px';
+            dot.style.top = e.pageY + 'px';
+            document.body.appendChild(dot);
+            setTimeout(() => dot.remove(), 1000);
+        }
+    });
+
+    // --- AUDIO ---
+    const audio = document.getElementById('bg-music');
+    let isPlaying = false;
+
+    function toggleMusic() {
+        const btn = document.querySelector('.music-control');
+        if (isPlaying) {
+            audio.pause();
+            btn.innerHTML = "🔇";
+        } else {
+            audio.play().catch(e => console.log("Audio interaction required"));
+            btn.innerHTML = "🎵";
+        }
+        isPlaying = !isPlaying;
     }
-});
+
+    // --- LOCK SCREEN ---
+    function handleEnter(e) {
+        if (e.key === 'Enter') checkPassword();
+    }
+
+    function checkPassword() {
+        const input = document.getElementById('password-input');
+        if (input.value === PASSCODE) {
+            document.getElementById('lock-screen').classList.add('slide-up');
+            toggleMusic(); 
+        } else {
+            input.style.borderColor = 'red';
+            input.classList.add('error-shake');
+            setTimeout(() => {
+                input.classList.remove('error-shake');
+                input.style.borderColor = 'var(--accent-gold)';
+            }, 400);
+            input.value = "";
+        }
+    }
+
+    // --- THREAD LOGIC ---
+    function sparkleThread(e) {
+        // Add sparkles on thread hover
+        const spark = document.createElement('div');
+        spark.className = 'trail-dot';
+        spark.style.background = '#ff0000';
+        spark.style.left = e.pageX + 'px';
+        spark.style.top = e.pageY + 'px';
+        document.body.appendChild(spark);
+        setTimeout(() => spark.remove(), 500);
+    }
+
+    function breakThread() {
+        const path = document.getElementById('thread-path');
+        const knot = document.getElementById('knot-element');
+        const page1 = document.getElementById('page-thread');
+        const page2 = document.getElementById('page-letter');
+
+        // Snap animation
+        const length = path.getTotalLength();
+        path.style.strokeDasharray = length;
+        path.style.strokeDashoffset = 0;
+        path.getBoundingClientRect(); // Trigger reflow
+
+        path.style.transition = "stroke-dashoffset 1.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s 1s";
+        path.style.strokeDashoffset = length; // Unravel
+        path.style.opacity = 0;
+
+        knot.style.transform = "translate(-50%, -50%) scale(5)"; // Explode heart
+        knot.style.opacity = 0;
+
+        setTimeout(() => {
+            page1.classList.add('fade-out');
+            page2.style.opacity = 1;
+            page2.style.transition = "opacity 2s ease-in";
+            setTimeout(typeLetter, 1000);
+        }, 1200);
+    }
+
+    // --- LETTER ANIMATION ---
+    function typeLetter() {
+        const container = document.getElementById('letter-text');
+        odiaLetterContent.forEach((text, index) => {
+            const p = document.createElement('p');
+            p.textContent = text;
+            container.appendChild(p);
+
+            // Slower, ink-bleed reveal
+            setTimeout(() => {
+                p.classList.add('visible');
+                if (index === odiaLetterContent.length - 1) {
+                    setTimeout(() => {
+                        const sigDiv = document.createElement('div');
+                        sigDiv.innerHTML = signatureHTML;
+                        sigDiv.style.opacity = 0;
+                        sigDiv.style.transition = "opacity 2s";
+                        container.appendChild(sigDiv);
+                        setTimeout(() => sigDiv.style.opacity = 1, 100);
+                    }, 2000);
+                }
+            }, index * 2500); 
+        });
+    }
+
+    // --- ROSE INTERACTION (PETAL RAIN) ---
+    function rainPetals(element) {
+        // Get position of the rose
+        const rect = element.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        for(let i=0; i<10; i++) {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            petal.style.left = centerX + 'px';
+            petal.style.top = centerY + 'px';
+            petal.style.backgroundColor = Math.random() > 0.5 ? '#8b0000' : '#ff0000';
+            
+            // Random scatter
+            const xMove = (Math.random() - 0.5) * 100;
+            const delay = Math.random() * 0.5;
+            
+            petal.style.animation = `fall 2s ease-out forwards ${delay}s`;
+            
+            // Custom transform for spread
+            petal.style.transform = `translate(${xMove}px, 0)`;
+
+            document.body.appendChild(petal);
+            setTimeout(() => petal.remove(), 2500);
+        }
+    }
+
 </script>
 
 </body>
