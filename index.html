@@ -1,492 +1,226 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="or">
 <head>
 <meta charset="UTF-8">
+<title>For You ❤️</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Surprise for Sushree ❤️</title>
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display&family=Handlee&display=swap" rel="stylesheet">
+
 <style>
-    :root {
-        --primary: #ff4d6d;
-        --secondary: #5c0f24;
-        --glass: rgba(255, 255, 255, 0.1);
-        --text: #ffffff;
-    }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
+body{
+    font-family:'Playfair Display', serif;
+    background:linear-gradient(135deg,#fdeff2,#fff6e5);
+    height:100vh;
+    overflow:hidden;
+}
 
-    body {
-        font-family: 'Poppins', sans-serif;
-        background: linear-gradient(135deg, #2b061e 0%, #5c0f24 100%);
-        color: var(--text);
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        position: relative;
-    }
+/* COMMON */
+.section{
+    display:none;
+    height:100vh;
+    width:100%;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    text-align:center;
+    padding:20px;
+}
 
-    /* Floating Background Hearts */
-    .bg-heart {
-        position: absolute;
-        bottom: -50px;
-        background-color: rgba(255, 255, 255, 0.1);
-        width: 20px;
-        height: 20px;
-        transform: rotate(45deg);
-        animation: floatUp 10s linear infinite;
-        z-index: 0;
-    }
-    .bg-heart::before, .bg-heart::after {
-        content: "";
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        background-color: inherit;
-    }
-    .bg-heart::before { top: -10px; left: 0; }
-    .bg-heart::after { left: -10px; top: 0; }
+.section.active{
+    display:flex;
+}
 
-    @keyframes floatUp {
-        0% { transform: translateY(0) rotate(45deg) scale(0.5); opacity: 0; }
-        20% { opacity: 0.8; }
-        100% { transform: translateY(-120vh) rotate(45deg) scale(1.2); opacity: 0; }
-    }
+/* PAGE 1 */
+#page1 h1{
+    font-size:26px;
+    margin-bottom:25px;
+    line-height:1.6;
+    max-width:600px;
+}
 
-    /* Main Card */
-    .container {
-        position: relative;
-        z-index: 10;
-        width: 90%;
-        max-width: 450px;
-        background: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-radius: 24px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 30px;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        text-align: center;
-        transition: height 0.3s ease;
-    }
+.thread{
+    width:220px;
+    height:4px;
+    background:#b3002d;
+    border-radius:50px;
+    cursor:pointer;
+    animation:pulse 1.6s infinite;
+}
 
-    h1, h2 {
-        font-family: 'Pacifico', cursive;
-        color: #ffb3c1;
-        margin-bottom: 15px;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    }
+@keyframes pulse{
+    0%{box-shadow:0 0 5px #b3002d;}
+    50%{box-shadow:0 0 15px #b3002d;}
+    100%{box-shadow:0 0 5px #b3002d;}
+}
 
-    h1 { font-size: 1.8rem; }
-    h2 { font-size: 1.4rem; }
+/* PASSWORD PAGE */
+#passwordPage input{
+    padding:12px;
+    font-size:18px;
+    text-align:center;
+    border-radius:8px;
+    border:1px solid #999;
+    margin-top:15px;
+    width:240px;
+}
 
-    p {
-        font-size: 0.95rem;
-        line-height: 1.6;
-        margin-bottom: 20px;
-        opacity: 0.9;
-    }
+#passwordPage button{
+    margin-top:15px;
+    padding:10px 24px;
+    font-size:16px;
+    border:none;
+    background:#b3002d;
+    color:#fff;
+    border-radius:25px;
+    cursor:pointer;
+}
 
-    .small-text {
-        font-size: 0.8rem;
-        opacity: 0.7;
-        font-style: italic;
-    }
+/* LETTER PAGE */
+#letterPage{
+    overflow-y:auto;
+}
 
-    /* Sections & Transitions */
-    .section {
-        display: none;
-        animation: fadeIn 0.5s ease-out forwards;
-    }
-    .section.active {
-        display: block;
-    }
+.letter{
+    background:#fffaf0;
+    max-width:800px;
+    padding:40px;
+    border-radius:18px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.15);
+    animation:fadeIn 2s ease;
+}
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
+@keyframes fadeIn{
+    from{opacity:0; transform:translateY(30px);}
+    to{opacity:1; transform:translateY(0);}
+}
 
-    /* Buttons (Options) */
-    .options-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        margin-top: 20px;
-    }
+.letter h2{
+    font-family:'Great Vibes', cursive;
+    font-size:38px;
+    margin-bottom:25px;
+}
 
-    button {
-        background: linear-gradient(45deg, #ff4d6d, #c9184a);
-        color: white;
-        border: none;
-        padding: 14px 20px;
-        border-radius: 50px;
-        font-size: 1rem;
-        font-family: 'Poppins', sans-serif;
-        font-weight: 600;
-        cursor: pointer;
-        transition: transform 0.2s, box-shadow 0.2s;
-        width: 100%;
-        position: relative;
-        overflow: hidden;
-        /* Hiding specific content styles for security */
-    }
+.letter p{
+    font-family:'Handlee', cursive;
+    font-size:20px;
+    line-height:1.8;
+    margin-bottom:18px;
+}
 
-    button:hover {
-        transform: scale(1.02);
-        box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
-    }
+.signature{
+    margin-top:30px;
+    font-size:22px;
+}
 
-    button:active {
-        transform: scale(0.98);
-    }
+/* DATE TIME */
+#dateTime{
+    margin-top:20px;
+    font-size:14px;
+    opacity:0.7;
+}
 
-    button.secondary {
-        background: rgba(255,255,255,0.1);
-        border: 1px solid rgba(255,255,255,0.2);
-    }
-    button.secondary:hover {
-        background: rgba(255,255,255,0.2);
-    }
+/* LOVE ANIMATION */
+#love{
+    font-family:'Great Vibes', cursive;
+    font-size:50px;
+    color:#b3002d;
+    margin-top:40px;
+    animation:heartbeat 1.5s infinite;
+}
 
-    /* Custom Alert Toast */
-    #custom-toast {
-        position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%) translateY(-100px);
-        background: white;
-        color: #5c0f24;
-        padding: 12px 24px;
-        border-radius: 50px;
-        font-weight: bold;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        z-index: 100;
-        transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        width: max-content;
-        max-width: 90%;
-    }
-    #custom-toast.show {
-        transform: translateX(-50%) translateY(0);
-    }
-
-    /* Shake Animation for wrong answer */
-    .shake {
-        animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
-    }
-    @keyframes shake {
-        10%, 90% { transform: translate3d(-1px, 0, 0); }
-        20%, 80% { transform: translate3d(2px, 0, 0); }
-        30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-        40%, 60% { transform: translate3d(4px, 0, 0); }
-    }
-
-    /* Final Page Styling */
-    .creative-box {
-        background: rgba(0,0,0,0.3);
-        padding: 15px;
-        border-radius: 12px;
-        margin: 15px 0;
-        font-family: monospace;
-        font-size: 0.9rem;
-        border-left: 3px solid #ff4d6d;
-        text-align: left;
-    }
-
-    .highlight {
-        color: #ff4d6d;
-        font-weight: bold;
-    }
+@keyframes heartbeat{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.2);}
+    100%{transform:scale(1);}
+}
 </style>
 </head>
+
 <body>
 
-    <!-- Floating Hearts Container -->
-    <div id="hearts-container"></div>
+<!-- PAGE 1 -->
+<div class="section active" id="page1">
+    <h1>
+        I’m really sorry…<br>
+        I didn’t get enough time to write everything I wanted to say today.<br>
+        I promise I’ll write it properly and give it to you very soon.
+    </h1>
+    <div class="thread" onclick="goToPassword()"></div>
+</div>
 
-    <!-- Custom Toast Notification -->
-    <div id="custom-toast">
-        <span id="toast-icon">⚠️</span> <span id="toast-msg">Wrong Answer!</span>
+<!-- PASSWORD PAGE -->
+<div class="section" id="passwordPage">
+    <h2>Enter the secret to open</h2>
+    <input type="password" id="password" placeholder="Phone Number">
+    <button onclick="checkPassword()">Unlock</button>
+    <p id="error" style="color:red;margin-top:10px;"></p>
+</div>
+
+<!-- LETTER PAGE -->
+<div class="section" id="letterPage">
+    <div class="letter">
+        <h2>ମୋର ପ୍ରିୟ ସୁଶ୍ରୀ ମହାପାତ୍ର,</h2>
+
+        <p>ମୁଁ ଜାଣେନି କେଉଁଠୁ ଆରମ୍ଭ କରିବି, କିନ୍ତୁ ଆଜି ମୋ ହୃଦୟର ସମସ୍ତ କଥା ତୁମ ସମ୍ମୁଖରେ ରଖିବାକୁ ଚାହୁଁଛି ।  
+        ତୁମେ ଯେବେଠାରୁ ମୋ ଜୀବନରେ ଆସିଛ, ସେବେଠାରୁ ମୋ ସମ୍ପୂର୍ଣ୍ଣ ଦୁନିଆ ଆଲୋକିତ ହୋଇଯାଇଛି ।</p>
+
+        <p>ତୁମେ କେବଳ ମୋର ପ୍ରେମିକା ନୁହେଁ, ତୁମେ ମୋର ସବୁଠାରୁ ଭଲ ସାଙ୍ଗ, ମୋର ଆଶ୍ରୟ ଏବଂ ମୋର ଜୀବନର ସବୁଠାରୁ ସୁନ୍ଦର ଅଂଶ ।  
+        ତୁମର ସେହି ଗୋଟିଏ ହସ ମୋର ସମସ୍ତ ଦୁଃଖକୁ ମୁହୂର୍ତ୍ତ ମଧ୍ୟରେ ଭୁଲାଇ ଦେଉଛି ।</p>
+
+        <p>ମୁଁ ଭଗବାନଙ୍କୁ ହୃଦୟରୁ ଧନ୍ୟବାଦ ଦେଉଛି, ଯେ ସେ ମୋ ଜୀବନରେ ତୁମ ପରି ଜଣେ ମୂଲ୍ୟବାନ ସାଥୀକୁ ଆଣିଛନ୍ତି ।  
+        ମୁଁ ତୁମକୁ କଥା ଦେଉଛି — ସାରା ଜୀବନ ତୁମକୁ ଏମିତି ଭଲ ପାଇବି, ତୁମର ଯତ୍ନ ନେବି ଏବଂ ସବୁବେଳେ ତୁମ ପାଖରେ ଦଢ଼ି ରହିବି ।</p>
+
+        <p>ମୋ ଜୀବନକୁ ଏତେ ସୁନ୍ଦର କରିଦେଇଥିବାରୁ ଧନ୍ୟବାଦ ।  
+        ମୁଁ ତୁମକୁ ଅସୀମ ଭାବରେ ଭଲପାଏ ।</p>
+
+        <div class="signature">
+            ଇତି,<br>
+            ତୁମର ରିୟାଜ୍ ଅହମ୍ମଦ୍
+        </div>
+
+        <div id="dateTime"></div>
+
+        <div id="love">I Love You ❤️</div>
     </div>
+</div>
 
-    <div class="container" id="app-interface">
-        
-        <!-- INTRO -->
-        <div class="section active" data-step="intro">
-            <h1>Hey Sushree Mohapatra ❤️</h1>
-            <p>Welcome to your personal surprise console.</p>
-            <p class="small-text">Status: Internet sleepy, Riyaz not sleepy — because BUG = you.</p>
-            <button class="action-btn" data-target="q1">Start The Quiz ✨</button>
-        </div>
-
-        <!-- QUESTION 1 -->
-        <div class="section" data-step="q1">
-            <h2>Level 1</h2>
-            <p>Complete the phrase:</p>
-            <div class="options-grid">
-                <!-- Data-val is obscured; Logic handles validity -->
-                <button class="choice-btn secondary" data-val="bad_spelling">Yyyaaayi</button>
-                <button class="choice-btn" data-val="correct_spelling">Kuiiyaai yaayi ✅</button>
-            </div>
-        </div>
-
-        <!-- QUESTION 2 -->
-        <div class="section" data-step="q2">
-            <h2>Level 2 (Odia Test)</h2>
-            <p>Which one feels right?</p>
-            <div class="options-grid">
-                <button class="choice-btn secondary" data-val="odia_wrong">mu tumaku bhala pae</button>
-                <button class="choice-btn" data-val="odia_correct">bhala pe mu tumaku ❤️</button>
-            </div>
-        </div>
-
-        <!-- QUESTION 3 -->
-        <div class="section" data-step="q3">
-            <h2>Level 3</h2>
-            <p>Whose Pookie are you?</p>
-            <div class="options-grid">
-                <button class="choice-btn" data-val="my_pookie">MY POOKIE 🐻</button>
-                <button class="choice-btn secondary" data-val="someone_else">Someone else's</button>
-            </div>
-        </div>
-
-        <!-- QUESTION 4 -->
-        <div class="section" data-step="q4">
-            <h2>Level 4</h2>
-            <p>Are you not even loving me na?</p>
-            <div class="options-grid">
-                <button class="choice-btn secondary" data-val="yes_loving">Yes 😤</button>
-                <button class="choice-btn" data-val="chapppp">CHAPPPP 🤫</button>
-            </div>
-        </div>
-
-        <!-- CREATIVE/POEM -->
-        <div class="section" data-step="creative">
-            <h2>Console Opened 🔓</h2>
-            <p class="small-text">Developer note: This server contains 99% love, 1% Riyaz.</p>
-            
-            <div class="creative-box">
-                <strong>ODIA MODE ON ↓</strong><br><br>
-                MU TUMAKU BHALA PAE<br>
-                TUME MORA SHANTI<br>
-                MORA NUA SAKALA<br>
-                MORA HASA REASON
-            </div>
-
-            <div class="creative-box">
-                <strong>ENGLISH MODE ON ↓</strong><br><br>
-                I HAD NO TIME, SO I WROTE TIME.<br>
-                I HAD NO IDEA, SO I WROTE YOUR NAME.
-            </div>
-
-            <button class="action-btn" data-target="final">Unlock Birthday Surprise 🎁</button>
-        </div>
-
-        <!-- FINAL -->
-        <div class="section" data-step="final">
-            <h1>🎉 HAPPY BIRTHDAY 🎉<br>SUSHREE MOHAPATRA</h1>
-            
-            <p>✅ <strong>BOYFRIEND EXAM PASSED</strong><br>
-            Result: Distinction in tolerating Riyaz 😄</p>
-            
-            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; margin-top: 20px;">
-                <h3 style="color:#ffb3c1">Special Command</h3>
-                <p style="margin-top:10px;">
-                    HELLO BIRTHDAY GIRL,<br>
-                    Please come outside PG now sooon.<br>
-                    <span class="highlight">Surprise visual waiting in REAL LIFE.</span>
-                </p>
-                <p class="small-text">Reward: Cake + Hug + One irritating human (Me).</p>
-            </div>
-            
-            <p class="small-text" style="margin-top:20px;">— Riyaz, Midnight Department 🌙</p>
-        </div>
-
-    </div>
+<!-- BACKGROUND MUSIC -->
+<audio id="music" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
 
 <script>
-    /**
-     * SURPRISE CORE SYSTEM v2.0
-     * Protected by Boyfriend Protocol
-     * Logic is obfuscated to prevent cheating ;)
-     */
+function goToPassword(){
+    document.getElementById("page1").classList.remove("active");
+    document.getElementById("passwordPage").classList.add("active");
+}
 
-    class RomanticConsole {
-        constructor() {
-            this.container = document.getElementById('app-interface');
-            this.toast = document.getElementById('custom-toast');
-            this.heartsContainer = document.getElementById('hearts-container');
-            
-            // Encrypted Logic Map (Base64 encoded)
-            // This prevents reading the answers directly from the source code.
-            this.securityMap = {
-                'q1': { 
-                    target: 'Y29ycmVjdF9zcGVsbGluZw==', // Decodes to 'correct_spelling'
-                    next: 'q2',
-                    error: 'U3BlbGxpbmcgbWlzdGFrZSEgUml5YXogaGVhcnQgYnJlYWsg8J+TkQ==' 
-                },
-                'q2': { 
-                    target: 'b2RpYV9jb3JyZWN0', // Decodes to 'odia_correct'
-                    next: 'q3',
-                    error: 'RGV2ZWxvcGVyIHNheXM6IE9kaWEgd3Jvbmcg4oaIIFRyeSBhZ2FpbiE=' 
-                },
-                'q3': { 
-                    target: 'bXlfcG9va2ll', // Decodes to 'my_pookie'
-                    next: 'q4',
-                    error: 'U3lzdGVtIEplYWxvdXMhIENob29zZSBNWSBQT09LSUUgb25seSE=' 
-                },
-                'q4': { 
-                    target: 'Y2hhcHBwcA==', // Decodes to 'chapppp'
-                    next: 'creative',
-                    error: 'U2VsZWN0IENIQVBQUFAgdG8gc2F5IENIVVAg4oCUIE9iZXkgcHJvdG9jb2wh',
-                    successToast: 'Q0hVVBBQUFBQIENPUlJFQ1Qg8J+YgQ==' 
-                }
-            };
+function checkPassword(){
+    const correct = "8056535112";
+    const input = document.getElementById("password").value;
 
-            this.init();
-        }
+    if(input === correct){
+        document.getElementById("passwordPage").classList.remove("active");
+        document.getElementById("letterPage").classList.add("active");
+        document.body.style.overflow="auto";
 
-        init() {
-            this.createHearts();
-            this.bindEvents();
-        }
+        document.getElementById("music").play();
 
-        bindEvents() {
-            // Event delegation for better performance and cleaner HTML
-            this.container.addEventListener('click', (e) => {
-                const target = e.target;
-                
-                // Handle direct navigation buttons
-                if (target.classList.contains('action-btn')) {
-                    const nextStep = target.dataset.target;
-                    this.navigate(nextStep);
-                }
-
-                // Handle quiz choice buttons
-                if (target.classList.contains('choice-btn')) {
-                    const currentSection = target.closest('.section');
-                    const stepId = currentSection.dataset.step;
-                    const choiceVal = target.dataset.val;
-                    
-                    this.validateChoice(stepId, choiceVal);
-                }
-            });
-        }
-
-        validateChoice(stepId, choiceVal) {
-            const config = this.securityMap[stepId];
-            if (!config) return;
-
-            // Verify hash match
-            if (btoa(choiceVal) === config.target) {
-                // Correct Answer
-                if (config.successToast) {
-                    this.showToast(atob(config.successToast), 'success');
-                    setTimeout(() => this.navigate(config.next), 1200);
-                } else {
-                    this.navigate(config.next);
-                }
-            } else {
-                // Wrong Answer
-                const errorMsg = atob(config.error);
-                this.triggerError(errorMsg);
-            }
-        }
-
-        navigate(stepId) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(s => {
-                s.classList.remove('active');
-            });
-            
-            // Show target section
-            const nextSection = document.querySelector(`.section[data-step="${stepId}"]`);
-            if (nextSection) {
-                nextSection.classList.add('active');
-            }
-
-            // Special effect for final page
-            if (stepId === 'final') {
-                this.triggerConfetti();
-            }
-        }
-
-        triggerError(msg) {
-            this.container.classList.add('shake');
-            setTimeout(() => this.container.classList.remove('shake'), 400);
-            this.showToast(msg, 'error');
-            
-            if (navigator.vibrate) navigator.vibrate(200);
-        }
-
-        showToast(msg, type = 'error') {
-            const toastText = document.getElementById('toast-msg');
-            const toastIcon = document.getElementById('toast-icon');
-            
-            toastText.innerText = msg;
-            toastIcon.innerText = type === 'error' ? '⚠️' : '✅';
-            
-            this.toast.style.color = type === 'error' ? '#5c0f24' : '#2b9348';
-            
-            this.toast.classList.add('show');
-            setTimeout(() => {
-                this.toast.classList.remove('show');
-            }, 3000);
-        }
-
-        createHearts() {
-            const count = 15;
-            for (let i = 0; i < count; i++) {
-                const heart = document.createElement('div');
-                heart.classList.add('bg-heart');
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
-                heart.style.opacity = Math.random() * 0.5;
-                heart.style.width = (Math.random() * 20 + 10) + 'px';
-                heart.style.height = heart.style.width;
-                this.heartsContainer.appendChild(heart);
-            }
-        }
-
-        triggerConfetti() {
-            const colors = ['#ff4d6d', '#fff0f3', '#ffb3c1', '#ffffff'];
-            for (let i = 0; i < 100; i++) {
-                const confetti = document.createElement('div');
-                confetti.style.position = 'fixed';
-                confetti.style.width = '10px';
-                confetti.style.height = '10px';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.top = '-10px';
-                confetti.style.zIndex = '1000';
-                confetti.style.borderRadius = '50%';
-                confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
-                document.body.appendChild(confetti);
-                setTimeout(() => confetti.remove(), 5000);
-            }
-        }
+        const now = new Date();
+        document.getElementById("dateTime").innerText =
+            "Opened on: " + now.toLocaleString();
+    } else {
+        document.getElementById("error").innerText="Wrong number 💔";
     }
-
-    // Initialize System
-    const app = new RomanticConsole();
-
-    // Inject dynamic styles for confetti
-    const style = document.createElement('style');
-    style.innerHTML = `
-        @keyframes fall {
-            to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
-    `;
-    document.head.appendChild(style);
+}
 </script>
 
 </body>
